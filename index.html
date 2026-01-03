@@ -487,14 +487,14 @@
         }
 
         .toggle-btn.important {
-            background: linear-gradient(135deg, rgba(123, 47, 247, 0.2), rgba(147, 51, 234, 0.2));
-            border-color: rgba(123, 47, 247, 0.5);
+            background: linear-gradient(135deg, rgba(123, 47, 247, 0.08), rgba(147, 51, 234, 0.08));
+            border-color: rgba(123, 47, 247, 0.2);
             border-width: 2px;
         }
 
         .toggle-btn.important:hover {
-            background: linear-gradient(135deg, rgba(123, 47, 247, 0.3), rgba(147, 51, 234, 0.3));
-            border-color: rgba(123, 47, 247, 0.7);
+            background: linear-gradient(135deg, rgba(123, 47, 247, 0.15), rgba(147, 51, 234, 0.15));
+            border-color: rgba(123, 47, 247, 0.4);
         }
 
         .toggle-btn.important.active {
@@ -974,14 +974,8 @@
             // Regular commands
             { name: 'ren_fps', displayName: 'Show FPS', description: 'Render FPS', default: false },
             { name: 'ren_achievements', description: 'Render achievements', default: true },
-            { name: 'ren_background', description: 'Render background', default: true },
-            { name: 'ren_cache_grid', description: 'Cache grid on separate canvas', default: true },
-            { name: 'ren_context_reinitialization', description: 'Reinitialize contexts if FPS is too low', default: true },
-            { name: 'ren_debug_collisions', description: 'Render collidable debug info', default: false },
-            { name: 'ren_debug_info', description: 'Render some debug info on the server stats test', default: false },
             { name: 'ren_health_bars', description: 'Render health bars', default: true },
             { name: 'ren_names', description: 'Render names', default: true },
-            { name: 'ren_pattern_grid', description: "Use canvas createPattern for grid", default: true },
             { name: 'ren_raw_health_values', description: 'Render raw health bar values', default: false },
             { name: 'ren_scoreboard', description: 'Render scoreboard', default: true },
             { name: 'ren_scoreboard_names', description: 'Render scoreboard names', default: true },
