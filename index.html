@@ -946,11 +946,18 @@
 
     <!-- Scripts -->
     <script>
-        // Initialize API_URL early
-        let currentServer = localStorage.getItem("selectedServer") || "4v4.lol:8080";
+        const SERVERS = [
+            { name: "USA", value: "4v4.lol:8080" },
+            { name: "Europe", value: "5.75.166.182:8080" },
+            { name: "Singapore", value: "5.223.76.101:8080" },
+            // { name: "Localhost", value: "localhost:8080" }
+        ];
+
+        let currentServer = SERVERS[0].value; // localStorage.getItem("selectedServer")
         window.API_URL = location.protocol + "//" + currentServer + "/api/";
         console.log("Initial API_URL:", window.API_URL);
     </script>
+
     <script src="./config.js"></script>
     <script src="./input.js"></script>
     <script src="./dma.js"></script>
@@ -958,14 +965,6 @@
     <script src="./util.js"></script>
 
     <script>
-        // Server configurations (NO EMOJIS)
-        const SERVERS = [
-            { name: "United States", value: "4v4.lol:8080", region: "NA" },
-            { name: "Brazil", value: "br.4v4.lol:8080", region: "SA" },
-            { name: "Singapore", value: "sg.4v4.lol:8080", region: "AS" },
-            { name: "Localhost", value: "localhost:8080", region: "DEV" }
-        ];
-
         // Console command configurations
         const consoleCommands = [
             // IMPORTANT COMMANDS - Always at top
