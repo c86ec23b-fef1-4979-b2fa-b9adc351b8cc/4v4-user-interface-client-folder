@@ -864,7 +864,7 @@
                     <div>
                         <div class="keybind-label">Diep Style</div>
                         <button id="diepStyleKeybindBtn" class="menu-button compact keybind-diepstyle">
-                            <span id="diepStyleKeybindText" class="button-text-large">Press K</span>
+                            <span id="diepStyleKeybindText" class="button-text-large">Press Q</span>
                         </button>
                     </div>
                 </div>
@@ -953,11 +953,10 @@
             // { name: "Localhost", value: "localhost:8080" }
         ];
 
-        let currentServer = SERVERS[0].value; // localStorage.getItem("selectedServer")
+        window.currentServer = localStorage.getItem("selectedServer") || SERVERS[0].value;
         window.API_URL = location.protocol + "//" + currentServer + "/api/";
         console.log("Initial API_URL:", window.API_URL);
     </script>
-
     <script src="./config.js"></script>
     <script src="./input.js"></script>
     <script src="./dma.js"></script>
@@ -1006,8 +1005,8 @@
 
                 authScreen.style.display = "none";
                 gameScreen.style.display = "block";
-                
-                // loadUserProfile(sessionData);
+                                setupServerDropdown();
+               // loadUserProfile(sessionData);
                 
             } catch (error) {
                 console.error("Auth check failed:", error);
@@ -1028,45 +1027,49 @@
                 avatarUrl = `https://cdn.discordapp.com/embed/avatars/${parseInt(userId) % 5}.png`;
             }
             
-            const accessLevel = typeof Module !== "undefined" && Module.permissionLevel !== undefined 
-                ? Module.permissionLevel 
-                : (sessionData.accessLevel !== undefined ? sessionData.accessLevel : 0);
+            // Wait for Module.permissionLevel to be set by the game
+            //setTimeout(() => {
+                const accessLevel = typeof Module !== "undefined" && Module.permissionLevel !== undefined 
+                    ? Module.permissionLevel 
+                    : (sessionData.accessLevel !== undefined ? sessionData.accessLevel : 0);
                 
-            let role = "Member";
+                let role = "Member";
                 
-            switch(accessLevel) {
-                case 3:
-                    role = "Admin";
-                    break;
-                case 2:
-                    role = "Moderator";
-                    break;
-                case 1:
-                    role = "Manager";
-                    break;
-                case 0:
-                    role = "Verified";
-                    break;
-                case -1:
-                    role = "Unverified";
-                    break;
-                default:
-                    role = "Member";
-            }
+                switch(accessLevel) {
+                    case 3:
+                        role = "Admin";
+                        break;
+                    case 2:
+                        role = "Moderator";
+                        break;
+                    case 1:
+                        role = "Manager";
+                        break;
+                    case 0:
+                        role = "Verified";
+                        break;
+                    case -1:
+                        role = "Unverified";
+                        break;
+                    default:
+                        role = "Member";
+                }
                 
                 // Update profile role displays
-            document.getElementById("profileRole").textContent = role;
-            document.getElementById("menuUserRole").textContent = role;
+                document.getElementById("profileRole").textContent = role;
+                document.getElementById("menuUserRole").textContent = role;
                 
-            // Show admin section if accessLevel is 1 (Manager) or higher
-            if (accessLevel >= 1) {
-                adminCommandsSection.style.display = "block";
-            }
+                // Show admin section if accessLevel is 1 (Manager) or higher
+                if (accessLevel >= 1) {
+                    adminCommandsSection.style.display = "block";
+                }
                 
-            if (accessLevel >= 1) {
-                announcementBtn.style.display = "flex";
-            }
-
+                // Show announcement button only for Admin role (accessLevel 3)
+                if (accessLevel >= 3) {
+                    announcementBtn.style.display = "flex";
+                }
+            //}, 1000);
+            
             // Update profile widget
             document.getElementById("profileAvatar").src = avatarUrl;
             document.getElementById("profileName").textContent = username;
@@ -1076,12 +1079,11 @@
             document.getElementById("menuUsername").textContent = username;
 
             // Initialize console commands and server dropdown
-           // setTimeout(() => {
-                console.log("Initializing UI components...");
+            // setTimeout(() => {
+            console.log("Initializing UI components...");
                 initConsoleCommands();
-                setupServerDropdown();
                 checkIfInGame();
-            //}, 1500);
+            // }, 1500);
         }
 
         // Setup custom server dropdown
@@ -1120,6 +1122,7 @@
                     // Update selection
                     const newServer = server.value;
                     localStorage.setItem("selectedServer", newServer);
+                    window.currentServer = newServer
                     window.API_URL = location.protocol + "//" + newServer + "/api/";
                     
                     // Update UI
@@ -1347,15 +1350,11 @@
             profileWidget.classList.remove("visible");
             profileWidget.classList.add("hidden");
             menuManuallyOpened = true;
-
-            window.disableInputs = true;
         }
 
         function closeMenu() {
             profileMenu.style.display = "none";
             menuManuallyOpened = false;
-
-            window.disableInputs = false;
         }
 
         // Close menu when clicking outside
@@ -1379,7 +1378,7 @@
         }
         
         // Keybind system - DIEP STYLE
-        let diepStyleKeybind = localStorage.getItem("diepStyleKeybind") || "KeyK";
+        let diepStyleKeybind = localStorage.getItem("diepStyleKeybind") || "KeyQ";
         let isWaitingForDiepStyleKeybind = false;
         
         function updateDiepStyleKeybindDisplay() {
@@ -1608,8 +1607,6 @@
                 } catch (error) {
                     console.error("Logout error:", error);
                 }
-                
-                localStorage.clear();
                 
                 gameScreen.style.display = "none";
                 profileMenu.style.display = "none";

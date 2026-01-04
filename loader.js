@@ -74,6 +74,7 @@ Module.reloadColorsInterval = -2;
 // Run frames via requestAnimationFrame or setTimeout
 Module.scheduler = window.requestAnimationFrame;
 
+let isFirstConnect = true
 // abort client
 Module.abort = cause => {
     Module.isAborted = true;
@@ -1265,7 +1266,7 @@ class ASMConsts {
         const url = Module.UTF8ToString(urlPtr);
         const session = await getLoginData();
         console.log(session);
-        const ws = new WebSocket(`ws${location.protocol.slice(4)}//${localStorage.selectedServer}/${url.slice(5, url.length - 4)}?${session.sessionId}`);
+        const ws = new WebSocket(`ws${location.protocol.slice(4)}//${window.currentServer}/${url.slice(5, url.length - 4)}?${session.sessionId}`);
         ws.binaryType = "arraybuffer";
         ws.events = [];
         ws.onopen = function() {
@@ -1292,7 +1293,11 @@ class ASMConsts {
                 out |= (view[at++] & 0x7f) << i;
                 Module.permissionLevel = (0 - (out & 1)) ^ (out >>> 1);
                 window.Game.reloadCommands();
-                window.loadUserProfile(window.sessionData);
+
+                if (isFirstConnect) {
+                    window.loadUserProfile(session);
+                    isFirstConnect = false;
+                }
             }
             const ptr = Module.exports.malloc(view.length);
             Module.HEAP8.set(view, ptr);
