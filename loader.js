@@ -1292,6 +1292,7 @@ class ASMConsts {
                 out |= (view[at++] & 0x7f) << i;
                 Module.permissionLevel = (0 - (out & 1)) ^ (out >>> 1);
                 window.Game.reloadCommands();
+                window.loadUserProfile(window.sessionData);
             }
             const ptr = Module.exports.malloc(view.length);
             Module.HEAP8.set(view, ptr);
